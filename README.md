@@ -1,4 +1,4 @@
-# happiness_prediction
+# Happiness Prediction
 This project focuses on predicting customer happiness for ACME, a rapidly growing logistics and delivery startup. By leveraging customer survey responses, the goal is to develop a classification model that can accurately determine whether a customer is "happy" or "unhappy." The insights gained from this model will help ACME understand the key drivers of customer satisfaction, identify areas for operational improvement, and ultimately support their global expansion strategy by enhancing customer experience.
 
 ## Business Problem
