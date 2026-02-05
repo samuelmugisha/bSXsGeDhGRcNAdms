@@ -58,7 +58,7 @@ Tuned Decision Tree                          0.552632  0.652174   0.625000  0.63
 Random Forest Classifier                     0.500000  0.652174   0.576923  0.612245
 SVM Classifier                               0.552632  0.782609   0.600000  0.679245
 Naive Bayes Classifier                       0.552632  0.739130   0.607143   0.666667
-Random Forest Classifier Reduced             0.730769  0.846154   0.687500   0.758621
+Random Forest Classifier (Reduced Features)  0.730769  0.846154   0.687500   0.758621
 Decision Tree Classifier (Reduced Features)  0.615385  0.692308   0.600000   0.642857
 Tuned Decision Tree (Reduced Features)       0.615385  0.692308   0.600000   0.642857
 Logistic Regression (Reduced Features)       0.500000  1.000000   0.500000   0.666667
