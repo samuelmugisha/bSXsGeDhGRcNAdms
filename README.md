@@ -98,8 +98,13 @@ Naive Bayes Classifier (Reduced Features)    0.615385  0.769231   0.588235   0.6
 ```
 . (root directory)
 ├── README.md
+├── data/
+│   └── ACME-HappinessSurvey2020.csv
 ├── models/
 │   └── happiness_prediction_model.joblib
+├── notebooks/
+│   └── happiness_prediction.ipynb
+│   └── happiness_prediction.html
 ├── src/
 │   ├── app.py
 │   ├── config.py
