@@ -94,8 +94,8 @@ Naive Bayes Classifier (Reduced Features)    0.615385  0.769231   0.588235   0.6
 -   **Re-evaluate Survey**: Consider removing X4 and X6 from future surveys to streamline data collection, as they were found to have minimal predictive impact.
 -   **Collect More Data**: To further enhance model robustness and generalization, especially for more complex algorithms, continuously collect more customer feedback data.
 
-
 ## Project Structure
+```
 . (root directory)
 ├── README.md
 ├── models/
@@ -108,10 +108,14 @@ Naive Bayes Classifier (Reduced Features)    0.615385  0.769231   0.588235   0.6
 │   ├── predict.py
 │   ├── requirements.txt
 │   └── train.py
-└── data/
-    ├── ACME-HappinessSurvey2020.csv
-  
+└── reports/
+    ├── reports.pdf
+    ├── Generated analysis as HTML/
+    └── figures/
+        └── Generated graphics and figures to be used in reporting/
 
+```
+  
 ## Setup
 
 ### 1. Clone the repository (if applicable):
