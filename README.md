@@ -43,18 +43,10 @@ Values for X1-X6 range from 1 (less) to 5 (more) towards the answer.
 
 The **Random Forest Classifier with reduced features (X1, X2, X3, X5)** emerged as the best-performing model, successfully meeting the project's accuracy target.
 
-**Best Model Performance on Test Set (Random Forest with Reduced Features):**
-- **Accuracy**: 73.08%
-- **Recall**: 84.62%
-- **Precision**: 68.75%
-- **F1-Score**: 75.86%
-
 ## Model Performance Summary (Best Model: Random Forest Classifier Reduced Features)
 | Model                      | Accuracy | Recall   | Precision | F1-Score |
 |----------------------------|----------|----------|-----------|----------|
 | Random Forest (Reduced)    | 0.730769 | 0.846154 | 0.687500  | 0.758621 |
-
-
 
 **Comparison of Model Performance on Test Set:**
 ```
