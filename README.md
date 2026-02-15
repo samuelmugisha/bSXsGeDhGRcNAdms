@@ -103,8 +103,8 @@ Naive Bayes Classifier (Reduced Features)    0.615385  0.769231   0.588235   0.6
 ├── models/
 │   └── happiness_prediction_model.joblib
 ├── notebooks/
-│   └── happiness_prediction.ipynb
-│   └── happiness_prediction.html
+│   └── Happiness_Prediction.html
+│   └── Happiness_Prediction.ipynb
 ├── src/
 │   ├── app.py
 │   ├── config.py
