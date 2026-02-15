@@ -1,7 +1,7 @@
 # config.py
 
 # Data paths
-DATASET_PATH = "/content/drive/MyDrive/MLProjects/ACME/ACME-HappinessSurvey2020.csv"
+DATASET_PATH = "/data/ACME-HappinessSurvey2020.csv"
 SAVED_MODEL_DIR = "models"
 SAVED_MODEL_FILENAME = "happiness_prediction_model.joblib"
 SAVED_MODEL_PATH = f"{SAVED_MODEL_DIR}/{SAVED_MODEL_FILENAME}"
