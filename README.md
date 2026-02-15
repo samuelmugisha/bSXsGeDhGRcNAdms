@@ -49,6 +49,13 @@ The **Random Forest Classifier with reduced features (X1, X2, X3, X5)** emerged 
 - **Precision**: 68.75%
 - **F1-Score**: 75.86%
 
+## Model Performance Summary (Best Model: Random Forest Classifier Reduced Features)
+| Model                      | Accuracy | Recall   | Precision | F1-Score |
+|----------------------------|----------|----------|-----------|----------|
+| Random Forest (Reduced)    | 0.730769 | 0.846154 | 0.687500  | 0.758621 |
+
+
+
 **Comparison of Model Performance on Test Set:**
 ```
                                              Accuracy    Recall  Precision        F1
@@ -88,38 +95,7 @@ Naive Bayes Classifier (Reduced Features)    0.615385  0.769231   0.588235   0.6
 -   **Collect More Data**: To further enhance model robustness and generalization, especially for more complex algorithms, continuously collect more customer feedback data.
 
 
-
-%%writefile README.md
-# ACME Happiness Predictor
-
-## Project Overview
-This project aims to predict customer happiness (0: unhappy, 1: happy) based on their survey responses regarding various aspects of their service experience. The goal is to identify key factors influencing happiness and build a robust classification model.
-
-## Data Description
-The dataset consists of customer survey responses with the following attributes:
-- `Y`: Target variable, 0 (unhappy) or 1 (happy).
-- `X1`: My order was delivered on time (1-5).
-- `X2`: Contents of my order was as I expected (1-5).
-- `X3`: I ordered everything I wanted to order (1-5).
-- `X4`: I paid a good price for my order (1-5).
-- `X5`: I am satisfied with my courier (1-5).
-- `X6`: The app makes ordering easy for me (1-5).
-
-Attributes X1 to X6 have values from 1 to 5, where a smaller number indicates less satisfaction/agreement and a higher number indicates more satisfaction/agreement.
-
-## Goals
-- Predict if a customer is happy or not based on survey responses.
-- Achieve an accuracy score of 73% or above.
-- Identify which questions/features are most important for predicting customer happiness (feature selection).
-
-## Model Performance Summary (Best Model: Random Forest Classifier Reduced Features)
-| Model                      | Accuracy | Recall   | Precision | F1-Score |
-|----------------------------|----------|----------|-----------|----------|
-| Random Forest (Reduced)    | 0.730769 | 0.846154 | 0.687500  | 0.758621 |
-
-
 ## Project Structure
-```
 . (root directory)
 ├── README.md
 ├── models/
@@ -135,8 +111,6 @@ Attributes X1 to X6 have values from 1 to 5, where a smaller number indicates le
 └── data/
     ├── ACME-HappinessSurvey2020.csv
   
-
-```
 
 ## Setup
 
@@ -185,17 +159,3 @@ This project is deployed as a Hugging Face Space using Docker. The deployment pr
 
 The deployed application can be accessed at: [https://huggingface.co/spaces/dcsamuel/happiness_pediction](https://huggingface.co/spaces/dcsamuel/happiness_pediction)
 
-## Key Findings and Recommendations
-
-### Key Findings:
-*   **Best Performing Model**: The **Random Forest Classifier with reduced features (X1, X2, X3, X5)** emerged as the superior solution, achieving an **Accuracy of 73.08%** and an **F1-Score of 75.86%** on the test set. This model successfully meets and exceeds the project's target accuracy of 73% and provides the best balance of precision and recall.
-*   **Impact of Feature Reduction**: Dropping **X4 ('I paid a good price for my order')** and **X6 ('the app makes ordering easy for me')** significantly improved model performance, indicating these features were less predictive or introduced noise.
-*   **Key Predictive Features**: X1 (on-time delivery), X2 (contents as expected), X3 (ordered everything wanted), and X5 (courier satisfaction) consistently showed higher importance.
-*   **Overfitting**: Tree-based models (Decision Tree, Random Forest) initially struggled with overfitting due to the small dataset size (126 rows), which was mitigated by hyperparameter tuning and, more effectively, by feature reduction.
-
-### Recommendations:
-1.  **Adopt Random Forest Classifier with Reduced Features**: Implement and deploy this model for customer happiness prediction.
-2.  **Focus on Key Drivers**: Prioritize improvements in **on-time order delivery (X1)**, ensuring **order contents meet expectations (X2)**, facilitating customers to **order everything they want (X3)**, and maintaining **high satisfaction with couriers (X5)**.
-3.  **Re-evaluate Survey Questions**: Consider **removing X4** and **X6** from future surveys due to their low predictive power.
-4.  **Collect More Data**: For further improvements and to enhance model generalization, increasing the dataset size is crucial.
-5.  **Continuous Monitoring**: Implement continuous monitoring of the model's performance and regular retraining with new data.
