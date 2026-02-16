@@ -158,5 +158,4 @@ This project is deployed as a Hugging Face Space using Docker. The deployment pr
 4.  **Dockerfile Configuration**: The `src/Dockerfile` was adjusted to correctly copy all contents from the build context into the `/app` directory within the Docker container.
 5.  **File Upload**: Uploading the prepared `temp_space_repo` content to the Hugging Face Space.
 
-The deployed application can be accessed at: [https://huggingface.co/spaces/dcsamuel/happiness_pediction](https://huggingface.co/spaces/dcsamuel/happiness_pediction)
 
