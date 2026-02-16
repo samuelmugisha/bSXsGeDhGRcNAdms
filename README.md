@@ -105,11 +105,6 @@ Naive Bayes Classifier (Reduced Features)    0.615385  0.769231   0.588235   0.6
 │   ├── predict.py
 │   ├── requirements.txt
 │   └── train.py
-└── reports/
-    ├── reports.pdf
-    ├── Generated analysis as HTML/
-    └── figures/
-        └── Generated graphics and figures to be used in reporting/
 
 ```
   
