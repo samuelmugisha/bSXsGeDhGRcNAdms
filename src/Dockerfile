@@ -1,14 +1,26 @@
-# Use a minimal base image with Python 3.9 installed
-FROM python:3.9-slim
 
-# Set the working directory inside the container to /app
+# Use an official Python runtime as a parent image
+FROM python:3.9-slim-buster
+
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy all files from the build context (which will be temp_space_repo) into the container's /app directory
+# Copy the requirements file into the container at /app
+COPY requirements.txt .
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the current directory contents into the container at /app
 COPY . .
 
-# Install Python dependencies listed in requirements.txt
-RUN pip3 install -r requirements.txt
+# Make port 7860 (for Streamlit) and 5000 (for Flask backend) available to the world outside this container
+EXPOSE 7860
+EXPOSE 5000
 
-# Define the command to run the Streamlit app on port 8501 and make it accessible externally
-CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.enableXsrfProtection=false"]
+# Add an entrypoint script to run both Flask and Streamlit
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+
+# Run the entrypoint script
+CMD ["/app/entrypoint.sh"]
