@@ -110,47 +110,96 @@ Naive Bayes Classifier (Reduced Features)    0.615385  0.769231   0.588235   0.6
   
 ## Setup
 
-### 1. Clone the repository (if applicable):
-```bash
-git clone <your-repo-url>
-cd <your-repo-name>
-```
+%%writefile happiness/README.md
+# ACME Happiness Predictor
 
-### 2. Prepare the environment:
-Ensure you have Python 3.9+ installed.
+## Project Introduction
+This project aims to predict customer happiness (binary classification: happy/unhappy) based on their responses to a survey about their order and app experience. The goal is to identify key factors influencing customer satisfaction and provide actionable insights for improving operations. We aimed to achieve an accuracy score of 73% or above, or provide a compelling superior solution.
 
-### 3. Install dependencies:
-It is recommended to use a virtual environment.
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-pip install -r src/requirements.txt
-```
+## Data Description
+Our dataset consists of survey responses from a select customer cohort. Each record includes:
+-   **Y**: Target attribute (0 = unhappy, 1 = happy)
+-   **X1**: My order was delivered on time (1-5)
+-   **X2**: Contents of my order was as I expected (1-5)
+-   **X3**: I ordered everything I wanted to order (1-5)
+-   **X4**: I paid a good price for my order (1-5)
+-   **X5**: I am satisfied with my courier (1-5)
+-   **X6**: The app makes ordering easy for me (1-5)
 
-### 4. Data Setup:
-The dataset (`ACME-HappinessSurvey2020.csv`) is expected to be mounted from Google Drive at `/content/drive/MyDrive/MLProjects/ACME/ACME-HappinessSurvey2020.csv` as specified in `config.py`.
+Values for X1-X6 range from 1 (less) to 5 (more) towards the answer.
 
-## Running the Training Pipeline
-The `train.py` script contains all the logic for data loading, preprocessing, model training, evaluation, and saving the best model. To run the training pipeline locally, execute:
-```bash
-python src/train.py
-```
-This will train all models, print their performance, and save the best-performing model (`happiness_prediction_model.joblib`) to the `models/` directory.
+## Key Findings & Recommendations
 
-## Launching the Streamlit App Locally
-To run the Streamlit application, navigate to the root directory of your project and execute the following command:
-```bash
-streamlit run src/app.py
-```
-This will open the app in your web browser, allowing you to interact with the deployed model.
+### Key Findings:
+1.  **Best Performing Model**: The **Random Forest Classifier with reduced features (X1, X2, X3, X5)** emerged as the superior solution, achieving an **Accuracy of 73.08%** and an **F1-Score of 75.86%** on the test set. This model successfully met and exceeded the project's target accuracy of 73% and provided the best balance of precision and recall.
+2.  **Impact of Feature Reduction**: Dropping features **X4 ('I paid a good price for my order')** and **X6 ('the app makes ordering easy for me')** significantly improved the Random Forest model's performance (F1-score from 61.22% to 75.86%). These features were found to be less predictive for customer happiness in this dataset.
+3.  **Key Predictive Features**: X1 (on-time delivery), X2 (contents as expected), X3 (ordered everything wanted), and X5 (courier satisfaction) were identified as the most influential factors in predicting customer happiness.
 
-## Hugging Face Deployment
+### Recommendations:
+1.  **Adopt Random Forest Classifier with Reduced Features**: Implement this model for predicting customer happiness.
+2.  **Focus on Key Drivers**: Prioritize operational improvements around on-time delivery, order content accuracy, product availability, and courier service quality.
+3.  **Re-evaluate Survey Questions**: Consider removing X4 and X6 from future surveys due to their low predictive power.
+4.  **Collect More Data**: For future enhancements and better model generalization, increasing the dataset size is crucial.
 
-This project is deployed as a Hugging Face Space using Docker. The deployment process involved:
-1.  **Hugging Face Authentication**: Logging in to Hugging Face Hub programmatically.
-2.  **Space Creation**: Creating a new Hugging Face Space with `space_sdk="docker"`.
-3.  **Repository Structure Preparation**: Creating a temporary local repository (`temp_space_repo`) that mirrors the desired structure for the Hugging Face Space, ensuring all necessary application files (from `src/`) and the trained model (from `models/`) are correctly placed.
-4.  **Dockerfile Configuration**: The `src/Dockerfile` was adjusted to correctly copy all contents from the build context into the `/app` directory within the Docker container.
-5.  **File Upload**: Uploading the prepared `temp_space_repo` content to the Hugging Face Space.
+## Application Structure
+This repository contains the following key files for the application:
+-   `app.py`: The Streamlit frontend application for user interaction.
+-   `backend.py`: The Flask backend API that serves model predictions.
+-   `config.py`: Configuration file for model paths and feature lists.
+-   `predict.py`: Contains functions for loading the model and making predictions.
+-   `Dockerfile`: Defines the Docker image for containerizing the application.
+-   `entrypoint.sh`: A shell script to run both the Flask backend and Streamlit frontend concurrently in the Docker container.
+-   `requirements.txt`: Lists all Python dependencies with specific versions.
+-   `final_happiness_predictor.joblib`: The trained Random Forest model.
+
+
+## Local Installation and Setup
+
+### Prerequisites
+-   Python 3.9+
+-   `pip` (Python package installer)
+-   `git`
+
+### Steps:
+1.  **Clone the Repository (or download the 'happiness' folder)**:
+    ```bash
+    git clone <repository-url>
+    cd happiness
+    ```
+    (If you downloaded the `happiness.zip` from Colab, extract it and navigate into the `happiness` directory).
+
+2.  **Install Dependencies**:
+    Navigate to the `happiness` directory and install the required Python packages:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3.  **Run the Flask Backend**:
+    In your terminal, start the Flask application. This will typically run on `http://127.0.0.1:5000`:
+    ```bash
+    python backend.py
+    ```
+    Keep this terminal open, as the Flask app needs to keep running.
+
+4.  **Run the Streamlit Frontend**:
+    In a **new terminal window** (while the Flask backend is still running), navigate to the `happiness` directory and start the Streamlit app:
+    ```bash
+    streamlit run app.py
+    ```
+    Streamlit will typically open in your web browser at `http://localhost:8501` (or a similar address).
+
+## Deployment on Hugging Face Spaces
+
+This application is designed for Docker-based deployment on Hugging Face Spaces. The `Dockerfile` and `entrypoint.sh` are configured to launch both the Flask backend and Streamlit frontend within the same container. Upon pushing the project files to a Hugging Face Space configured with the Docker SDK, the platform will automatically build the image and deploy the application.
+
+**Key files for Hugging Face deployment:**
+-   `Dockerfile`
+-   `entrypoint.sh`
+-   `requirements.txt`
+-   `app.py`
+-   `backend.py`
+-   `config.py`
+-   `predict.py`
+-   `final_happiness_predictor.joblib`
 
 
