@@ -105,7 +105,7 @@ Naive Bayes Classifier (Reduced Features)    0.615385  0.769231   0.588235   0.6
 │   ├── predict.py
 │   ├── requirements.txt
 │   └── train.py
-
+```
 
 ## Application Structure
 This repository contains the following key files for the application:
