@@ -106,40 +106,6 @@ Naive Bayes Classifier (Reduced Features)    0.615385  0.769231   0.588235   0.6
 │   ├── requirements.txt
 │   └── train.py
 
-```
-  
-## Setup
-
-%%writefile happiness/README.md
-# ACME Happiness Predictor
-
-## Project Introduction
-This project aims to predict customer happiness (binary classification: happy/unhappy) based on their responses to a survey about their order and app experience. The goal is to identify key factors influencing customer satisfaction and provide actionable insights for improving operations. We aimed to achieve an accuracy score of 73% or above, or provide a compelling superior solution.
-
-## Data Description
-Our dataset consists of survey responses from a select customer cohort. Each record includes:
--   **Y**: Target attribute (0 = unhappy, 1 = happy)
--   **X1**: My order was delivered on time (1-5)
--   **X2**: Contents of my order was as I expected (1-5)
--   **X3**: I ordered everything I wanted to order (1-5)
--   **X4**: I paid a good price for my order (1-5)
--   **X5**: I am satisfied with my courier (1-5)
--   **X6**: The app makes ordering easy for me (1-5)
-
-Values for X1-X6 range from 1 (less) to 5 (more) towards the answer.
-
-## Key Findings & Recommendations
-
-### Key Findings:
-1.  **Best Performing Model**: The **Random Forest Classifier with reduced features (X1, X2, X3, X5)** emerged as the superior solution, achieving an **Accuracy of 73.08%** and an **F1-Score of 75.86%** on the test set. This model successfully met and exceeded the project's target accuracy of 73% and provided the best balance of precision and recall.
-2.  **Impact of Feature Reduction**: Dropping features **X4 ('I paid a good price for my order')** and **X6 ('the app makes ordering easy for me')** significantly improved the Random Forest model's performance (F1-score from 61.22% to 75.86%). These features were found to be less predictive for customer happiness in this dataset.
-3.  **Key Predictive Features**: X1 (on-time delivery), X2 (contents as expected), X3 (ordered everything wanted), and X5 (courier satisfaction) were identified as the most influential factors in predicting customer happiness.
-
-### Recommendations:
-1.  **Adopt Random Forest Classifier with Reduced Features**: Implement this model for predicting customer happiness.
-2.  **Focus on Key Drivers**: Prioritize operational improvements around on-time delivery, order content accuracy, product availability, and courier service quality.
-3.  **Re-evaluate Survey Questions**: Consider removing X4 and X6 from future surveys due to their low predictive power.
-4.  **Collect More Data**: For future enhancements and better model generalization, increasing the dataset size is crucial.
 
 ## Application Structure
 This repository contains the following key files for the application:
@@ -151,7 +117,6 @@ This repository contains the following key files for the application:
 -   `entrypoint.sh`: A shell script to run both the Flask backend and Streamlit frontend concurrently in the Docker container.
 -   `requirements.txt`: Lists all Python dependencies with specific versions.
 -   `final_happiness_predictor.joblib`: The trained Random Forest model.
-
 
 ## Local Installation and Setup
 
