@@ -100,11 +100,14 @@ Naive Bayes Classifier (Reduced Features)    0.615385  0.769231   0.588235   0.6
 ├── src/
 │   ├── app.py
 │   ├── config.py
+│   ├── backend.py
 │   ├── Dockerfile
 │   ├── plots.py
 │   ├── predict.py
 │   ├── requirements.txt
+│   ├── entrypoint.sh
 │   └── train.py
+
 ```
 
 ## Application Structure
