@@ -1,4 +1,4 @@
-# ACME Customer Happiness Predictor (Apziva Project)
+# ACME Customer Happiness Predictor
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
 ![ML](https://img.shields.io/badge/Machine%20Learning-Classification-orange)
@@ -148,6 +148,7 @@ This model meets the project target (**≥ 73% accuracy**) while maintaining str
 ---
 
 ## Repository Structure
+```
 ├── README.md
 ├── data/
 │ └── ACME-HappinessSurvey2020.csv
@@ -164,6 +165,7 @@ This model meets the project target (**≥ 73% accuracy**) while maintaining str
 ├── Dockerfile
 ├── entrypoint.sh # runs backend + frontend
 └── requirements.txt
+```
 
 ## How to Run Locally
 
