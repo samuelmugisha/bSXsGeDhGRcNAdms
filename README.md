@@ -173,7 +173,7 @@ This model meets the project target (**≥ 73% accuracy**) while maintaining str
 - git
 
 ### Setup
-```bash
+bash
 git clone https://github.com/samuelmugisha/bSXsGeDhGRcNAdms.git
 cd bSXsGeDhGRcNAdms/src
 pip install -r requirements.txt
@@ -182,7 +182,7 @@ python backend.py
 
 Backend will run on: http://127.0.0.1:5000
 
-Run the frontend (Streamlit)
+## Run the frontend (Streamlit)
 
 Open a new terminal in the same folder and run:
 
@@ -190,7 +190,7 @@ streamlit run app.py
 
 Frontend will open on: http://localhost:8501
 
-Run with Docker
+## Run with Docker
 
 From the src/ folder:
 
@@ -201,19 +201,14 @@ Streamlit UI: http://localhost:7860
 
 Flask API: http://localhost:5000/predict
 
-Deployment Notes (Hugging Face Spaces)
+## Deployment Notes (Hugging Face Spaces)
 
 This repo is configured for Docker-based deployment on Hugging Face Spaces.
-
 Key files:
-
-Dockerfile
-
-entrypoint.sh
-
-requirements.txt
-
-app.py, backend.py, config.py, predict.py
+- Dockerfile
+- entrypoint.sh
+- requirements.txt
+- app.py, backend.py, config.py, predict.py
 
 ## Key Takeaways
 - Feature reduction improved performance and reduced noise
