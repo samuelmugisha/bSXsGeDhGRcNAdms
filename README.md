@@ -1,173 +1,238 @@
-## Overview
-This project focuses on predicting customer happiness for ACME, a logistics and delivery startup. By analyzing survey responses from customers, the goal is to develop a classification model that can predict whether a customer is 'happy' (1) or 'unhappy' (0). The project also aims to identify key features that contribute most to customer satisfaction, enabling the company to make data-driven decisions to improve its services.
+# ACME Customer Happiness Predictor (Apziva Project)
+
+![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
+![ML](https://img.shields.io/badge/Machine%20Learning-Classification-orange)
+![Framework](https://img.shields.io/badge/Frontend-Streamlit-red)
+![Framework](https://img.shields.io/badge/Backend-Flask-green)
+![Deployment](https://img.shields.io/badge/Deploy-Docker%20%7C%20Hugging%20Face%20Spaces-black)
+
+Predict whether a customer is **Happy (1)** or **Unhappy (0)** using survey responses from a logistics and delivery startup (ACME).  
+This project covers the full ML lifecycle: **EDA → modeling → feature selection → evaluation → deployment as a web app**.
+
+---
+
+## Table of Contents
+- [Project Summary](#project-summary)
+- [Business Problem](#business-problem)
+- [Dataset](#dataset)
+- [Solution Overview](#solution-overview)
+- [Step-by-Step Project Flow](#step-by-step-project-flow)
+- [Results](#results)
+- [Application Architecture](#application-architecture)
+- [Repository Structure](#repository-structure)
+- [How to Run Locally](#how-to-run-locally)
+- [Run with Docker](#run-with-docker)
+- [Deployment Notes (Hugging Face Spaces)](#deployment-notes-hugging-face-spaces)
+- [Key Takeaways](#key-takeaways)
+- [Future Improvements](#future-improvements)
+- [Concluding Note for Hiring Managers](#concluding-note-for-hiring-managers)
+
+---
+
+## Project Summary
+ACME collects customer survey feedback, but needs a scalable way to **predict satisfaction** and understand what factors most influence happiness.  
+I built and evaluated multiple classification models and shipped the best-performing approach as a simple **Streamlit + Flask** application that can be deployed via **Docker**.
+
+---
 
 ## Business Problem
-ACME, a rapidly growing logistics startup, needs to measure and predict customer happiness to improve its operations and sustain global expansion. Gathering direct feedback is challenging, so the objective is to leverage survey data (X1-X6) to predict a binary target (Y: happy/unhappy). The success metric is to achieve an accuracy score of 73% or above, or to provide a compelling solution that offers superior insights. A bonus goal is to identify the most important features to streamline future surveys and improve predictability.
+ACME is expanding rapidly and needs a reliable method to:
+1. Predict customer happiness from survey answers.
+2. Identify the most important survey questions to reduce survey length and improve signal quality.
 
-## Data
-The dataset consists of customer survey responses with 126 entries and 7 columns:
-- **Y**: Target variable (0 = unhappy, 1 = happy)
-- **X1**: My order was delivered on time (1-5)
-- **X2**: Contents of my order was as I expected (1-5)
-- **X3**: I ordered everything I wanted to order (1-5)
-- **X4**: I paid a good price for my order (1-5)
-- **X5**: I am satisfied with my courier (1-5)
-- **X6**: The app makes ordering easy for me (1-5)
+**Success metric:** Achieve **≥ 73% accuracy**, or provide a strong solution that delivers actionable insights.
 
-Values for X1-X6 range from 1 (less) to 5 (more) towards the answer.
+---
 
-## Approach
-1.  **Data Loading and Initial Inspection**: Loaded the `ACME-HappinessSurvey2020.csv` dataset, checked its shape, head, tail, info, and duplicates. Identified 16 duplicate rows and no null values.
-2.  **Exploratory Data Analysis (EDA)**:
-    *   **Univariate Analysis**: Used `histogram_boxplot` to visualize the distribution of each variable. Noted a relatively balanced target variable (Y) and varying sentiment for X1-X6.
-    *   **Bivariate Analysis**: Explored correlations using a heatmap. Found moderate positive correlations between Y and X1, X5, X6, and X3, with X2 and X4 showing very weak correlations. Stacked bar plots and distribution plots were used to visualize the relationship between each feature and the target variable.
-3.  **Outlier Detection and Treatment**: Box plots were used to identify outliers. Outliers in numerical columns were treated using a flooring and capping method (np.clip).
-4.  **Data Preparation for Modeling**: The dataset was split into training (80%) and testing (20%) sets. For `statsmodels` Logistic Regression, a constant term was added.
-5.  **Model Building and Evaluation**:
-    *   **Logistic Regression (Initial)**: Trained a logistic regression model using `statsmodels`. Identified 'const' and 'X1' as marginally significant predictors.
-    *   **Feature Selection (Logistic Regression)**: Performed iterative feature elimination based on p-values. Only 'const' and 'X1' remained as statistically significant features.
-    *   **Tuned Logistic Regression**: Retrained Logistic Regression with selected features and optimized the threshold using the Precision-Recall curve to maximize F1-score.
-    *   **Decision Tree Classifier (Initial)**: Trained a default `DecisionTreeClassifier`. Noted severe overfitting with high training performance but poor test performance.
-    *   **Decision Tree Hyperparameter Tuning**: Used `GridSearchCV` to find optimal hyperparameters (`criterion`, `max_depth`, `min_samples_leaf`) to address overfitting.
-    *   **Random Forest Classifier (Initial)**: Trained a default `RandomForestClassifier`. Also showed severe overfitting.
-    *   **Support Vector Machine (SVM)**: Trained a default `SVC` model.
-    *   **Naive Bayes Classifier**: Trained a `GaussianNB` model.
-6.  **Feature Reduction & Re-evaluation**: Based on early analysis and feature importances, features X4 and X6 were identified as least important. A new dataset `X_new` (dropping X4 and X6) was created and models were re-trained and evaluated:
-    *   **Random Forest Classifier (Reduced Features)**: Retrained with `X_new` and optimized hyperparameters. This model achieved the best performance.
-    *   **Decision Tree Classifier (Reduced Features)**: Retrained with `X_new`, and also tuned with `GridSearchCV`.
-    *   **Logistic Regression (Reduced Features)**: Retrained with `X_new`.
-    *   **SVM Classifier (Reduced Features)**: Retrained with `X_new`.
-    *   **Naive Bayes Classifier (Reduced Features)**: Retrained with `X_new`.
+## Dataset
+The dataset contains **126 survey responses** with the following columns:
+
+- **Target**
+  - `Y`: customer happiness (`0 = unhappy`, `1 = happy`)
+
+- **Features (1–5 Likert scale)**
+  - `X1`: My order was delivered on time  
+  - `X2`: Contents of my order was as I expected  
+  - `X3`: I ordered everything I wanted to order  
+  - `X4`: I paid a good price for my order  
+  - `X5`: I am satisfied with my courier  
+  - `X6`: The app makes ordering easy for me  
+
+---
+
+## Solution Overview
+### Models explored
+- Logistic Regression (statsmodels + interpretability + feature significance)
+- Decision Tree (baseline + tuned)
+- Random Forest (baseline + tuned)
+- SVM
+- Naive Bayes
+
+### Key decision
+Early analysis showed some features contributed little to predictive power.  
+I tested a **reduced feature set** and re-trained models to improve generalization.
+
+✅ Final model: **Random Forest using reduced features:** `X1, X2, X3, X5`
+
+---
+
+## Step-by-Step Project Flow
+
+### 1) Data Loading & Quality Checks
+- Loaded survey data
+- Checked shape, data types, duplicates, and missing values
+- Confirmed no null values and handled duplicates
+
+### 2) Exploratory Data Analysis (EDA)
+- Univariate distributions (histograms + boxplots)
+- Correlation analysis (heatmap)
+- Feature vs target analysis using stacked and distribution plots
+
+**Insight:** `X1`, `X5`, `X3` (and sometimes `X6`) appeared more correlated with happiness than `X2` and `X4`.
+
+### 3) Outlier Handling
+- Used boxplots for detection
+- Applied flooring/capping (`np.clip`) to reduce outlier distortion
+
+### 4) Modeling & Evaluation
+- Train/test split (80/20)
+- Baseline modeling across multiple algorithms
+- Identified overfitting patterns (especially tree-based models on small data)
+
+### 5) Tuning & Feature Selection
+- Logistic regression feature elimination using p-values (interpretability step)
+- GridSearchCV for tree-based models to reduce overfitting
+
+### 6) Feature Reduction & Re-Training
+- Dropped weaker features (`X4`, `X6`)
+- Re-ran training + evaluation across models
+- Selected best-performing model based on accuracy and balanced precision/recall
+
+### 7) Packaging & Deployment
+- Saved trained model (`joblib`)
+- Built:
+  - **Flask API** for predictions
+  - **Streamlit UI** for user interaction
+- Dockerized the full solution with an entrypoint that runs both services
+
+---
 
 ## Results
+### Best Model (Random Forest — Reduced Features)
+| Metric | Score |
+|-------|------:|
+| Accuracy | **0.730769** |
+| Recall | 0.846154 |
+| Precision | 0.687500 |
+| F1-score | 0.758621 |
 
-The **Random Forest Classifier with reduced features (X1, X2, X3, X5)** emerged as the best-performing model, successfully meeting the project's accuracy target.
+This model meets the project target (**≥ 73% accuracy**) while maintaining strong recall and a solid F1-score.
 
-## Model Performance Summary (Best Model: Random Forest Classifier Reduced Features)
-| Model                      | Accuracy | Recall   | Precision | F1-Score |
-|----------------------------|----------|----------|-----------|----------|
-| Random Forest (Reduced)    | 0.730769 | 0.846154 | 0.687500  | 0.758621 |
+---
 
-**Comparison of Model Performance on Test Set:**
-```
-                                             Accuracy    Recall  Precision        F1
-Untuned Decision Tree                        0.631579  0.608696   0.736842  0.666667
-Logistic Regression                          0.631579  0.695652   0.695652  0.695652
-Tuned Decision Tree                          0.552632  0.652174   0.625000  0.638298
-Random Forest Classifier                     0.500000  0.652174   0.576923  0.612245
-SVM Classifier                               0.552632  0.782609   0.600000  0.679245
-Naive Bayes Classifier                       0.552632  0.739130   0.607143   0.666667
-Random Forest Classifier (Reduced Features)  0.730769  0.846154   0.687500   0.758621
-Decision Tree Classifier (Reduced Features)  0.615385  0.692308   0.600000   0.642857
-Tuned Decision Tree (Reduced Features)       0.615385  0.692308   0.600000   0.642857
-Logistic Regression (Reduced Features)       0.500000  1.000000   0.500000   0.666667
-SVM Classifier (Reduced Features)            0.653846  0.692308   0.642857   0.666667
-Naive Bayes Classifier (Reduced Features)    0.615385  0.769231   0.588235   0.666667
-```
+## Application Architecture
 
-## Tools & Technologies
--   **Python**: Programming Language
--   **Pandas**: Data manipulation and analysis
--   **NumPy**: Numerical operations
--   **Matplotlib**: Data visualization
--   **Seaborn**: Enhanced data visualization
--   **Scikit-learn**: Machine learning models (Decision Tree, Random Forest, SVM, Naive Bayes, `train_test_split`, `GridSearchCV`, `accuracy_score`, `recall_score`, `precision_score`, `f1_score`, `confusion_matrix`, `precision_recall_curve`)
--   **Statsmodels**: Statistical modeling (Logistic Regression)
+**User Flow**
+1. User opens Streamlit UI
+2. Inputs survey scores for `X1, X2, X3, X5`
+3. Streamlit sends a POST request to Flask `/predict`
+4. Flask loads the trained model and returns:
+   - predicted class (happy/unhappy)
+   - confidence score (probability)
 
-## Key Learnings
--   **Feature Importance**: Features X1 ('my order was delivered on time'), X2 ('contents of my order was as I expected'), X3 ('I ordered everything I wanted to order'), and X5 ('I am satisfied with my courier') were consistently found to be the most influential predictors of customer happiness. X4 ('I paid a good price for my order') and X6 ('the app makes ordering easy for me') demonstrated lower predictive power.
--   **Impact of Feature Reduction**: Removing less important features (X4 and X6) significantly improved the performance of the Random Forest model, leading to better generalization and the achievement of the target accuracy. This suggests that these features might have introduced noise or were not relevant for prediction in this context.
--   **Overfitting with Small Datasets**: Tree-based models (Decision Tree, Random Forest) were prone to overfitting given the relatively small dataset size (126 rows). Hyperparameter tuning and feature selection were crucial to mitigate this.
--   **Model Selection**: While Logistic Regression provided good interpretability, the Random Forest Classifier with a reduced feature set proved to be the most effective predictive model for this problem, offering the best balance of precision and recall while meeting the accuracy goal.
+**Why this architecture?**
+- Separates concerns (UI vs model serving)
+- Easy to scale backend independently
+- Simple to deploy with Docker
 
-## Recommendations
--   **Adopt Random Forest Classifier (Reduced Features)**: Implement this model for predicting customer happiness.
--   **Focus on Key Drivers**: Prioritize operational improvements around on-time delivery (X1), meeting content expectations (X2), enabling full ordering (X3), and courier satisfaction (X5).
--   **Re-evaluate Survey**: Consider removing X4 and X6 from future surveys to streamline data collection, as they were found to have minimal predictive impact.
--   **Collect More Data**: To further enhance model robustness and generalization, especially for more complex algorithms, continuously collect more customer feedback data.
+---
 
-## Project Structure
-```
-. (root directory)
+## Repository Structure
 ├── README.md
 ├── data/
-│   └── ACME-HappinessSurvey2020.csv
+│ └── ACME-HappinessSurvey2020.csv
 ├── models/
-│   └── happiness_prediction_model.joblib
+│ └── happiness_prediction_model.joblib
 ├── notebooks/
-│   └── Happiness_Prediction.html
-│   └── Happiness_Prediction.ipynb
-├── src/
-│   ├── app.py
-│   ├── config.py
-│   ├── backend.py
-│   ├── Dockerfile
-│   ├── plots.py
-│   ├── predict.py
-│   ├── requirements.txt
-│   ├── entrypoint.sh
-│   └── train.py
+│ ├── Happiness_Prediction.ipynb
+│ └── Happiness_Prediction.html
+└── src/
+├── app.py # Streamlit frontend
+├── backend.py # Flask prediction API
+├── config.py # paths + selected features
+├── predict.py # model loading + inference
+├── Dockerfile
+├── entrypoint.sh # runs backend + frontend
+└── requirements.txt
 
-```
-
-## Application Structure
-This repository contains the following key files for the application:
--   `app.py`: The Streamlit frontend application for user interaction.
--   `backend.py`: The Flask backend API that serves model predictions.
--   `config.py`: Configuration file for model paths and feature lists.
--   `predict.py`: Contains functions for loading the model and making predictions.
--   `Dockerfile`: Defines the Docker image for containerizing the application.
--   `entrypoint.sh`: A shell script to run both the Flask backend and Streamlit frontend concurrently in the Docker container.
--   `requirements.txt`: Lists all Python dependencies with specific versions.
--   `final_happiness_predictor.joblib`: The trained Random Forest model.
-
-## Local Installation and Setup
+## How to Run Locally
 
 ### Prerequisites
--   Python 3.9+
--   `pip` (Python package installer)
--   `git`
+- Python 3.9+
+- pip
+- git
 
-### Steps:
-1.  **Clone the Repository (or download the 'happiness' folder)**:
-    ```bash
-    git clone <repository-url>
-    cd happiness
-    ```
-    (If you downloaded the `happiness.zip` from Colab, extract it and navigate into the `happiness` directory).
+### Setup
+```bash
+git clone https://github.com/samuelmugisha/bSXsGeDhGRcNAdms.git
+cd bSXsGeDhGRcNAdms/src
+pip install -r requirements.txt
+Run the backend (Flask)
+python backend.py
 
-2.  **Install Dependencies**:
-    Navigate to the `happiness` directory and install the required Python packages:
-    ```bash
-    pip install -r requirements.txt
-    ```
+Backend will run on: http://127.0.0.1:5000
 
-3.  **Run the Flask Backend**:
-    In your terminal, start the Flask application. This will typically run on `http://127.0.0.1:5000`:
-    ```bash
-    python backend.py
-    ```
-    Keep this terminal open, as the Flask app needs to keep running.
+Run the frontend (Streamlit)
 
-4.  **Run the Streamlit Frontend**:
-    In a **new terminal window** (while the Flask backend is still running), navigate to the `happiness` directory and start the Streamlit app:
-    ```bash
-    streamlit run app.py
-    ```
-    Streamlit will typically open in your web browser at `http://localhost:8501` (or a similar address).
+Open a new terminal in the same folder and run:
 
-## Deployment on Hugging Face Spaces
+streamlit run app.py
 
-This application is designed for Docker-based deployment on Hugging Face Spaces. The `Dockerfile` and `entrypoint.sh` are configured to launch both the Flask backend and Streamlit frontend within the same container. Upon pushing the project files to a Hugging Face Space configured with the Docker SDK, the platform will automatically build the image and deploy the application.
+Frontend will open on: http://localhost:8501
 
-**Key files for Hugging Face deployment:**
--   `Dockerfile`
--   `entrypoint.sh`
--   `requirements.txt`
--   `app.py`
--   `backend.py`
--   `config.py`
--   `predict.py`
--   `final_happiness_predictor.joblib`
+Run with Docker
 
+From the src/ folder:
 
+docker build -t acme-happiness .
+docker run -p 7860:7860 -p 5000:5000 acme-happiness
+
+Streamlit UI: http://localhost:7860
+
+Flask API: http://localhost:5000/predict
+
+Deployment Notes (Hugging Face Spaces)
+
+This repo is configured for Docker-based deployment on Hugging Face Spaces.
+
+Key files:
+
+Dockerfile
+
+entrypoint.sh
+
+requirements.txt
+
+app.py, backend.py, config.py, predict.py
+
+## Key Takeaways
+- Feature reduction improved performance and reduced noise
+- Small datasets amplify overfitting risk, making tuning essential
+- Random Forest offered the best balance of metrics for this problem
+- Deployment added real-world value beyond a notebook-only solution
+
+## Future Improvements
+
+- Collect more data to improve stability and reduce variance
+- Add model monitoring (drift checks, logging, prediction analytics)
+- Add explainability (SHAP) for decision transparency
+- Improve calibration of confidence scores
+- Expand UI with batch prediction and downloadable results
+
+## Concluding Note for Hiring Managers
+
+- This project demonstrates my ability to deliver an end-to-end machine learning solution:
+translating a business objective into a measurable ML task, conducting EDA and model experimentation, applying feature selection and tuning to improve generalization,
+and deploying the final model as a usable application (API + UI + Docker).
+
+If you're hiring for roles involving applied machine learning, data science, or ML product delivery, I’d be excited to discuss the decisions, trade-offs, and results in more detail.
