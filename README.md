@@ -229,7 +229,7 @@ Key files:
 ## Concluding Note for Hiring Managers
 
 - This project demonstrates my ability to deliver an end-to-end machine learning solution:
-translating a business objective into a measurable ML task, conducting EDA and model experimentation, applying feature selection and tuning to improve generalization,
-and deploying the final model as a usable application (API + UI + Docker).
+translating a business objective into a measurable ML task, conducting EDA and model experimentation, applying feature selection and tuning to improve generalization, and deploying the final model as a usable application (API + UI + Docker).
 
-If you're hiring for roles involving applied machine learning, data science, or ML product delivery, I’d be excited to discuss the decisions, trade-offs, and results in more detail.
+## 👤 Author 
+[Samuel Mugisha D.C | ML Engineer | AI Engineer](https://www.linkedin.com/in/samuelmugishadc/)
